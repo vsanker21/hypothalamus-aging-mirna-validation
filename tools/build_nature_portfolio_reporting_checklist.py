@@ -30,6 +30,7 @@ def build_reporting_summary(out_dir: Path) -> tuple[Path, Path]:
         ("Data availability — GSE188646 DE", out_dir / "gse188646_young_vs_aged_deg.csv"),
         ("Code availability — pipeline entry", PROJECT_ROOT / "run_extended.py"),
         ("Code availability — requirements", PROJECT_ROOT / "requirements.txt"),
+        ("Code availability — GitHub repository", None),  # filled below
         ("Reproducibility — figure manifest", PROJECT_ROOT / "data" / "provenance" / "FIGURE_PANEL_MANIFEST.csv"),
         ("Reproducibility — SA completeness", out_dir / "SA_COMPLETENESS_CHECK.txt"),
         ("External validation — Jin ABC aging scRNA", out_dir / "exploratory_allen_aging_scrna_validation_summary.json"),
@@ -42,7 +43,13 @@ def build_reporting_summary(out_dir: Path) -> tuple[Path, Path]:
         ("Zenodo deposit manifest", out_dir / "zenodo" / "ZENODO_DEPOSIT_MANIFEST.csv"),
     ]
 
-    rows = [{"item": item, "path": str(path), "present": _ok(path)} for item, path in checks]
+    github_url = "https://github.com/vsanker21/hypothalamus-aging-mirna-validation"
+    rows = []
+    for item, path in checks:
+        if path is None:
+            rows.append({"item": item, "path": github_url, "present": "yes"})
+        else:
+            rows.append({"item": item, "path": str(path), "present": _ok(path)})
     df = pd.DataFrame(rows)
     csv_path = ms_dir / "NATURE_PORTFOLIO_REPORTING_CHECKLIST.csv"
     df.to_csv(csv_path, index=False)
@@ -66,7 +73,7 @@ def build_reporting_summary(out_dir: Path) -> tuple[Path, Path]:
         "",
         "## Manual items before submission",
         "",
-        "- [ ] GitHub repository URL: https://github.com/vsanker21/hypothalamus-aging-mirna-validation (run tools/publish_to_github.ps1 after gh auth login)",
+        "- [x] GitHub repository: https://github.com/vsanker21/hypothalamus-aging-mirna-validation",
         "- [ ] Zenodo DOI",
         "- [ ] Author list, funding, competing interests",
         "",

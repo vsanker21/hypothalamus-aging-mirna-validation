@@ -4,6 +4,7 @@ Integrative reanalysis linking htNSC-biased miRNA target predictions to hypothal
 transcriptomics (GSE188646/GSE87102), with external third-ventricle validation (Allen ABC aging
 scRNA, MERFISH CCF anatomy, Jin RSTE3 BIL in situ spatial, GSE287202 Visium audit, Allen ISH).
 
+**Repository:** https://github.com/vsanker21/hypothalamus-aging-mirna-validation  
 **Author:** [vsanker21](https://github.com/vsanker21)
 
 ## Quick start
