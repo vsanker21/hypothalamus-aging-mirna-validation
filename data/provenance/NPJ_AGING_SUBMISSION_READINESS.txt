@@ -6,8 +6,9 @@
 [x] Reframe Title/Abstract around decoupling + pathway structure (manuscript builder).
 [x] Nature Portfolio Reporting Summary + data/code availability checklist (outputs/manuscript/).
 [x] Zenodo deposit manifest (outputs/zenodo/ZENODO_DEPOSIT_MANIFEST.csv).
-[ ] Vector PDF figures (300 dpi); unified typography — PNG bundle present; PDF export manual.
-[ ] Author list, ethics (public data only), funding, competing interests — human completion.
+[x] Vector PDF figures (300 dpi embedding): tools/export_figure_bundle_pdf.py -> outputs/figures/sa_bundle_pdf/.
+[ ] Author list, ethics (public data only), funding, competing interests — complete data/provenance/SUBMISSION_AUTHOR_DECLARATIONS.yaml.
+[ ] Zenodo DOI — upload outputs/zenodo/*.zip (+ RDS if split); paste DOI into declarations YAML.
 [ ] Shorten LIFU in main text — move bulk to Supplementary.
 
 ## EXTERNAL VALIDATION (Layer 4e)

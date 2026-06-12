@@ -25,6 +25,7 @@ ZENODO_INCLUDE = [
     ("outputs/exploratory_crossmodal_mirna_aging_summary.json", "Cross-modal summary"),
     ("outputs/exploratory_allen_aging_spatial_validation_summary.json", "RSTE3 validation summary"),
     ("outputs/figures/sa_bundle/", "Figure PNG bundle directory"),
+    ("outputs/figures/sa_bundle_pdf/", "Figure PDF bundle (300 dpi embedding)"),
     ("requirements.txt", "Python dependencies"),
     ("run_extended.py", "Main reproducibility entry point"),
 ]

@@ -20,6 +20,15 @@ Key outputs land in `outputs/` (gitignored). Regenerate figures:
 
 ```powershell
 python figures/build_sa_figure_bundle.py --outputs-dir outputs
+python tools/export_figure_bundle_pdf.py --outputs-dir outputs
+```
+
+Submission helpers (after a local run):
+
+```powershell
+python tools/prepare_zenodo_deposit_manifest.py --outputs-dir outputs
+python tools/build_zenodo_upload_bundle.py --outputs-dir outputs
+python tools/build_nature_portfolio_reporting_checklist.py --outputs-dir outputs
 ```
 
 ## Large data (not in Git)

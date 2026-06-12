@@ -1,0 +1,50 @@
+# npj Aging — human completion required before submission
+# Copy completed fields into the journal portal and Nature Reporting Summary PDF.
+
+title: >-
+  Third-ventricle niche decoupling of hypothalamic aging from htNSC-biased
+  miRNA target burden: integrative reanalysis with external spatial validation
+
+corresponding_author:
+  name: "[Full name]"
+  email: "[email@institution.edu]"
+  orcid: "[0000-0000-0000-0000]"
+  affiliation: "[Department, Institution, City, Country]"
+
+authors:
+  - name: "[Author 1]"
+    affiliation: "[Affiliation 1]"
+    orcid: ""
+    contributions: "Conceptualization; formal analysis; writing — original draft"
+  # - name: "[Author 2]"
+  #   affiliation: "[Affiliation 2]"
+  #   contributions: "Supervision; funding acquisition; writing — review & editing"
+
+ethics:
+  statement: >-
+    This study uses publicly available de-identified transcriptomic and spatial
+    datasets only (GEO, Allen Brain Atlas, Brain Image Library). No new human
+    subjects or animal experiments were performed.
+  irb_required: false
+  animal_protocol: "N/A — secondary computational analysis of public data"
+
+funding:
+  sources:
+    - agency: "[Agency name]"
+      grant_id: "[Grant number]"
+      recipient: "[PI name]"
+  statement: "[Funding statement for acknowledgements]"
+
+competing_interests:
+  statement: "The authors declare no competing interests."
+  # Or disclose specific items per journal form.
+
+data_availability:
+  code: "https://github.com/vsanker21/hypothalamus-aging-mirna-validation"
+  zenodo_doi: "[10.5281/zenodo.XXXXXXX — after upload]"
+  processed_outputs: "Zenodo deposit; key summaries in GitHub repository documentation"
+
+code_availability:
+  repository: "https://github.com/vsanker21/hypothalamus-aging-mirna-validation"
+  entry_point: "run_extended.py"
+  license: "MIT"

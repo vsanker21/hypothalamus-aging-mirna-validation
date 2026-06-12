@@ -41,6 +41,8 @@ def build_reporting_summary(out_dir: Path) -> tuple[Path, Path]:
         ("Small niche strata DE (48/50/57)", out_dir / "exploratory_gse188646_small_niche_strata_de_summary.json"),
         ("Statistical analysis plan", PROJECT_ROOT / "data" / "provenance" / "STATISTICAL_ANALYSIS_PLAN.txt"),
         ("Zenodo deposit manifest", out_dir / "zenodo" / "ZENODO_DEPOSIT_MANIFEST.csv"),
+        ("Figure PDF bundle (300 dpi)", out_dir / "figures" / "sa_bundle_pdf" / "SUPPLEMENTARY_FIGURES_COMBINED.pdf"),
+        ("Author declarations template", PROJECT_ROOT / "data" / "provenance" / "SUBMISSION_AUTHOR_DECLARATIONS.yaml"),
     ]
 
     github_url = "https://github.com/vsanker21/hypothalamus-aging-mirna-validation"

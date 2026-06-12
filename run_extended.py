@@ -787,6 +787,7 @@ def main():
     for tool_name in (
         "prepare_zenodo_deposit_manifest.py",
         "build_nature_portfolio_reporting_checklist.py",
+        "build_zenodo_upload_bundle.py",
     ):
         tpath = proj / "tools" / tool_name
         if tpath.is_file():
@@ -852,6 +853,25 @@ def main():
                         log(fr.stderr[-2000:])
             except Exception as e:
                 log(f"Figure bundle skipped: {e}")
+            pdf_script = proj / "tools" / "export_figure_bundle_pdf.py"
+            if pdf_script.is_file():
+                try:
+                    pr = subprocess.run(
+                        [sys.executable, str(pdf_script), "--outputs-dir", str(OUTPUT_DIR.resolve())],
+                        cwd=str(proj),
+                        capture_output=True,
+                        text=True,
+                        timeout=300,
+                        encoding="utf-8",
+                        errors="replace",
+                    )
+                    if pr.stdout:
+                        for ln in pr.stdout.strip().splitlines()[-5:]:
+                            log(ln)
+                    if pr.returncode != 0 and pr.stderr:
+                        log(pr.stderr[-1500:])
+                except Exception as e:
+                    log(f"Figure PDF export skipped: {e}")
         else:
             log(f"Missing {fig_script}")
     else:
