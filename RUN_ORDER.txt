@@ -1,0 +1,133 @@
+1) python run_pipeline.py
+
+   Recomputes Zhang 2017 MOESM summaries, figures, GEO sample metadata, optional g:Profiler.
+
+
+
+2) python run_extended.py
+
+   Requires step (1). At startup: optional AUTO_FETCH_PUBLIC_DATA, AUTO_FETCH_GSE188646_RDS,
+   AUTO_FETCH_HYPOMAP_H5AD (see data/provenance/DATA_ACQUISITION_AND_QC_RATIONALE.txt); validates
+   existing GMT caches; resolves GSE188646_RDS from env or canonical data/*.RDS if present.
+
+   Also runs journal-tier cross-modal coupling (exploratory_crossmodal_*) and
+   negative-control stratified permutations (exploratory_negative_controls_*; see
+   data/provenance/JOURNAL_TIER_COMPUTATIONAL_README.txt). After Tier-2: cell-type stratum summaries
+   (exploratory_crossmodal_celltype_* when outputs/gse188646_strata/manifest.csv exists),
+   pathway/TF coupling (exploratory_pathway_tf_*), STRING Piezo1 bridge (exploratory_string_piezo1_*;
+   opt-out STRING_BRIDGE_OFFLINE=1). Optional: GSE188646_AUTO_STRATIFIED_PSEUDOBULK=1 runs
+   r/pseudobulk_stratified_edgeR_gse188646.R on seurat_clusters when strata manifest is missing.
+
+   Downloads miRTarBase + MSigDB Hallmark GMTs (cached under data/cache),
+
+   builds miRNA target union, Hallmark ORA, multi-library Enrichr ORA (global BH), bootstrap
+
+   Jaccard stability of the target union, Aging GEO ORA, preranked GSEA, HypoMap GEO Fisher
+
+   overlap (documented caveats), optional Stouffer summary when both Fishers exist, exploratory
+
+   GSE188646 DE calibration + Fisher sensitivity (exploratory_*), then Tier-2 (R fgsea Hallmark,
+
+   GenAge Fisher, decoupler PROGENy + DoRothEA (mlm) on pseudobulk if counts exported, pseudobulk fgsea (multilevel when available)/camera/fry,
+
+   extra GEO sample metadata), LIFU layer.
+
+
+
+3) GSE188646 young vs aged DE (recommended: pseudobulk edgeR):
+
+   From feasibility_study/ with the GEO RDS path:
+
+     Rscript r/pseudobulk_edgeR_gse188646.R path/to/GSE188646_hypo.integrated.final.20210719.RDS skip_counts
+
+   Or set env GSE188646_RDS to that path and run python run_extended.py (auto-runs R if DE missing;
+
+   counts export only if GSE188646_EXPORT_COUNTS=1). Alternative Wilcox per-cell:
+
+     Rscript r/extract_gse188646_young_vs_aged.R path/to/...RDS
+
+   Re-run: python run_extended.py for Fisher overlap vs miRNA targets.
+
+
+
+4) Tier-2 details (end of run_extended.py):
+
+   R fgsea uses r/fgsea_hallmark_prerank.R (R + Bioconductor fgsea). GenAge uses HAGR models_genes.zip
+
+   (see data/provenance/GenAge_HAGR.txt). PROGENy needs pseudobulk .mtx from step 3 with
+
+   GSE188646_EXPORT_COUNTS=1. Pseudobulk exploratory pathway tests: r/fgsea_pseudobulk_de_hallmark.R,
+
+   r/camera_pseudobulk_hallmark.R, r/fry_pseudobulk_hallmark.R; exploratory_dorothea_* (mlm) from decoupler.
+
+   Optional: GSE188646_CELL_AGG_CHUNK (chunked aggregation), GSE188646_STRATUM_COL (per-stratum DE in outputs/gse188646_strata/).
+
+   Two-cohort GSE87102 limma + DL meta: ON by default in run_extended.py when cohort1 DE exists; set
+   GSE188646_SKIP_COHORT2_META=1 (or GSE188646_RUN_COHORT2_META=0) to skip — see data/replication/META_TWO_COHORTS_README.txt.
+
+   Figure PNG bundle: built at end of run_extended.py by default; SKIP_SA_FIGURE_BUNDLE=1 to skip.
+   Extra GEO: GSE94940, GSE161219 sample metadata via GEOparse.
+
+
+
+5) Narrative + provenance (read before grants/papers):
+
+   data/provenance/SCIENTIFIC_STORY_ONE_PAGE.txt — primary vs context-only claims.
+
+   data/provenance/FRAMING_NSC_HYPOTHALAMUS_LIFU_AGING_SCIENCE_ADVANCES.txt — Science Advances–
+   style figure plan, claims ladder, predictions/falsifiers (NSC niche + aging omics + LIFU lane).
+
+   data/provenance/STATISTICAL_ANALYSIS_PLAN.txt — endpoints, multiplicity, power honesty.
+   data/provenance/SCIENCE_ADVANCES_PENDING_CHECKLIST.txt — what is automated vs still needed for SA-grade submission.
+
+   data/provenance/EXTERNAL_DATA_PROVENANCE_TABLE.csv — one-row resource index.
+
+   data/provenance/REPLICATION_AND_META_POLICY.txt, TRANSLATION_REGULATORY_FRAMING.txt, PREREGISTRATION_NOTE.txt
+
+
+
+6) GSE188646 full stack (RDS + pseudobulk + counts + stratified by default):
+
+   powershell -File run_gse188646_extended.ps1
+
+   Auto-downloads official .RDS if missing; verifies file size; sets FORCE_PSEUDOBULK, EXPORT_COUNTS, STRATUM_COL=seurat_clusters.
+
+   After run_extended.py, runs r/gse188646_cluster_marker_mapping.R (marker modules → putative cell class per
+
+   seurat_clusters; outputs/gse188646_cluster_annotation/). Use -NoClusterMap to skip.
+
+   Then runs r/gse188646_hypomap_reference_mapping.R (GSE208355 DE axes vs cluster expression;
+
+   outputs/gse188646_hypomap_mapping/). Use -NoHypomapMap to skip.
+
+   Optional atlas-style reference matrix (gene × cell-type means CSV): pass
+
+   -HypomapRefExprCsv "data\references\hypomap_cellxgene_C185_named_mean_X_min200.csv" (finer C185) or
+   -HypomapRefExprCsv "data\references\hypomap_cellxgene_C66_named_mean_X.csv" (C66 overview)
+
+   so hypomap_custom_ref_spearman.csv is written when gene overlap is sufficient (see R script). Build CSV from
+
+   h5ad with python tools/build_hypomap_ref_mean_matrix.py.
+
+   Or: python tools/download_gse188646_rds.py --output data\GSE188646_hypo.integrated.final.20210719.RDS
+
+   Figure bundle (optional PNGs for manuscript panels): python figures/build_sa_figure_bundle.py
+   (manifest: data/provenance/FIGURE_PANEL_MANIFEST.csv → outputs/figures/sa_bundle/). Or set
+   Figure bundle (PNG): runs at end of run_extended.py by default; SKIP_SA_FIGURE_BUNDLE=1 to skip.
+
+   Cross-modal × two-cohort DL meta sensitivity: run_extended.py writes
+   outputs/exploratory_crossmodal_burden_vs_two_cohort_meta.csv when two-cohort meta CSV exists
+   (same miRNA burden vs pooled beta_DL; exploratory).
+
+
+
+7) Reproducibility freeze: python tools/snapshot_versions.py
+
+   Optional post-GSE188646 QC + prioritisation (also run automatically at end of run_extended.py when
+
+   outputs/gse188646_young_vs_aged_deg.csv exists): python tools/validation_gse188646_priority_report.py
+
+   → outputs/GSE188646_VALIDATION_AND_PRIORITIZATION_REPORT.txt and outputs/gse188646_prioritized_genes.csv
+
+   powershell -File tools/archive_outputs.ps1
+

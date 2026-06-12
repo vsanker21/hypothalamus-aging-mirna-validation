@@ -1,0 +1,19 @@
+GSE188646 PSEUDOBULK DE — PRIMARY VS EXPLORATORY OVERLAP POLICY
+Last updated: 2026-05-14
+
+PRIMARY (reported in main Fisher CSV without exploratory_ prefix)
+- Gene list: pseudobulk edgeR output outputs/gse188646_young_vs_aged_deg.csv filtered at adjusted p-value <= 0.05 (column p_val_adj / FDR naming as emitted by edgeR topTags). The table also includes se_logFC (from the QLF F statistic) for optional two-cohort meta-analysis.
+- Universe: miRTarBase mmu gene universe used elsewhere in the pipeline.
+- Fisher: overlap between miRNA target union and DE genes in that universe.
+
+EXPLORATORY (exploratory_* outputs; sensitivity only)
+- exploratory_gse188646_de_padj_calibration.csv — counts of genes at multiple FDR cutoffs (documentation).
+- fisher_targets_vs_gse188646_de_exploratory_padj0.1.csv — padj <= 0.1.
+- fisher_targets_vs_gse188646_de_exploratory_top200_ranked.csv / _top500_ranked.csv — top genes by sign(logFC)*(-log10(p)), no FDR filter.
+- exploratory_fgsea_hallmark_pseudobulk_de_ranks.csv — fgsea / fgseaMultilevel on ranked DE statistics (method column when present). Gene and GMT symbols are uppercased for overlap with the human-oriented Enrichr Hallmark GMT (mouse orthologs with same symbols).
+- exploratory_camera_hallmark_pseudobulk_young_vs_aged.csv — limma camera on pseudobulk log-CPM with age design.
+- exploratory_fry_hallmark_pseudobulk_young_vs_aged.csv — limma fry (rotation gene-set test) on the same log-CPM and design.
+- exploratory_meta_DE_two_cohort_DL.csv / exploratory_META_TWO_COHORT_DL_README.txt — DerSimonian–Laird meta on logFC+SE (GSE188646 + GSE87102); produced by default when cohort1 DE exists (skip with GSE188646_SKIP_COHORT2_META=1).
+
+RATIONALE
+- With n=4 vs 4 animals, FDR may be sparse at 0.05 after filtering; exploratory arms document sensitivity without elevating them to primary claims.

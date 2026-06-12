@@ -1,0 +1,69 @@
+HypoMap reference matrix for GSE188646 custom Spearman mapping
+================================================================
+
+PURPOSE
+  Optional gene × cell-type mean matrix for r/gse188646_hypomap_reference_mapping.R
+  (env GSE188646_HYPOMAP_REF_EXPR_CSV). Spearman correlation between GSE188646
+  seurat_cluster mean expression (Seurat RNA `data` layer) and HypoMap type
+  means is descriptive only: different animals, ages, protocols, and normalization.
+
+PRIMARY DATA SOURCE (recommended)
+  CZ CELLxGENE Discover — curated HypoMap collection (same object users explore in the portal):
+    Collection: https://cellxgene.cziscience.com/collections/d86517f0-fa7e-4266-b82e-a521350d6d36
+    Dataset asset (AnnData .h5ad, versioned UUID in URL):
+      https://datasets.cellxgene.cziscience.com/d3be7423-d664-4913-89a9-a506cae4c28f.h5ad
+    Publication: Steuernagel et al., Nature Metabolism 2022 — DOI 10.1038/s42255-022-00657-y
+
+  Downloader (reproducible URL + size check):
+    python tools/download_hypomap_cellxgene_h5ad.py --output data/references/cellxgene_hypomap.h5ad
+
+WHICH MATRIX TO AGGREGATE
+  CELLxGENE schema for this release records raw counts in `adata.raw` (`raw_data_location: raw.X`).
+  The primary matrix `adata.X` is the analysis / normalized representation used for visualization
+  and differential expression in the portal. For comparability with Seurat-normalized snRNA
+  pseudobulk-style cluster means, aggregate **means of `X`** (default in tools/build_hypomap_ref_mean_matrix.py),
+  not raw counts.
+
+WHICH `obs` COLUMN TO USE
+  Inspect the object locally:
+    python tools/build_hypomap_ref_mean_matrix.py inspect --h5ad data/references/cellxgene_hypomap.h5ad
+
+  For this CELLxGENE release (384,925 × 51,216):
+  - `cell_type` is only 13 coarse ontology-aligned classes — too coarse for hypothalamic structure.
+  - `Author_CellType` (654 classes, many ultra-rare) is too fragmented for stable per-type means.
+  - **Recommended default: `C66_named`** — HypoMap harmonized 66-cluster named resolution; in this
+    object every type has ≥61 cells (stable means), matching the paper’s multi-resolution taxonomy
+    without the extreme sparsity of C185+/C286+/C465+.
+  - **Finer resolution: `C185_named`** — 185 named clusters; stricter `--min-cells-per-type` drops
+    ultra-rare states. In the current CELLxGENE object: ≥100 cells → 177 types; ≥150 → 172;
+    ≥200 → **170 types** (stronger per-type mean stability while keeping more neuronal bins than C66).
+
+GENE IDENTIFIERS
+  In this file `var_names` are Ensembl gene IDs; **use `--var-gene-col feature_name`** so the CSV
+  uses mouse symbols consistent with GSE188646 `RNA` rownames.
+
+DEFAULT BUILD COMMAND (C66 — stable overview)
+  python tools/build_hypomap_ref_mean_matrix.py build \\
+    --h5ad data/references/cellxgene_hypomap.h5ad \\
+    --celltype-column C66_named \\
+    --var-gene-col feature_name \\
+    --output data/references/hypomap_cellxgene_C66_named_mean_X.csv \\
+    --min-cells-per-type 50 --max-types 80
+
+  Matrix aggregated: **mean of normalized `X`** per `C66_named` (not `raw.X` counts).
+
+FINER BUILD COMMAND (C185 — stricter min cells; built in repo 2026-05-15)
+  python tools/build_hypomap_ref_mean_matrix.py build \\
+    --h5ad data/references/cellxgene_hypomap.h5ad \\
+    --celltype-column C185_named \\
+    --var-gene-col feature_name \\
+    --output data/references/hypomap_cellxgene_C185_named_mean_X_min200.csv \\
+    --min-cells-per-type 200 --max-types 200
+
+  → 170 reference columns (types with ≥200 cells). Use the same env var as C66 to switch analyses.
+
+OUTPUT
+  Wide CSV: `gene` + one column per cell type → set GSE188646_HYPOMAP_REF_EXPR_CSV and re-run
+  r/gse188646_hypomap_reference_mapping.R (see RUN_ORDER.txt and GSE188646_ENV_VARS.txt).
+
+Retrieval date for the asset URL above should be recorded when you download (EXTERNAL_DATA_PROVENANCE_TABLE.csv).

@@ -1,0 +1,25 @@
+# npj Aging submission readiness — honest assessment (2026-06-12)
+# Auto-updated after full validation freeze.
+
+## MINIMUM ADDITIONS BEFORE SUBMISSION
+
+[x] Reframe Title/Abstract around decoupling + pathway structure (manuscript builder).
+[x] Nature Portfolio Reporting Summary + data/code availability checklist (outputs/manuscript/).
+[x] Zenodo deposit manifest (outputs/zenodo/ZENODO_DEPOSIT_MANIFEST.csv).
+[ ] Vector PDF figures (300 dpi); unified typography — PNG bundle present; PDF export manual.
+[ ] Author list, ethics (public data only), funding, competing interests — human completion.
+[ ] Shorten LIFU in main text — move bulk to Supplementary.
+
+## EXTERNAL VALIDATION (Layer 4e)
+
+[x] Allen Jin 2025 aging scRNA (ABC aging_degenes): V3 tanycyte/ependymal age-DE; Hallmark IFN overlap.
+[x] Allen MERFISH CCF spatial anatomy: tanycyte/ependymal HY/V3 localization.
+[x] GSE287202 Visium spot audit: V3-proxy spots (heuristic).
+[x] Jin RSTE3 BIL in situ aging spatial: processed tables + cell-level age stats + spatial-interface mask.
+[x] Allen ISH marker anatomy: StructureUnionize energies via SectionDataSet API.
+[x] GSE188646 small niche strata DE: clusters 48/50/57 (relaxed min_cells; requires RDS).
+
+## OPTIONAL REFINEMENTS COMPLETED
+
+[x] RSTE3 spatial-interface mask (per-slide ependymal/tanycyte y-band).
+[x] Full run_extended + figure bundle + manuscript + reporting checklist regeneration.

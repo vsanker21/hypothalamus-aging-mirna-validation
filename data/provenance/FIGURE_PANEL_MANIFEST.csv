@@ -1,0 +1,13 @@
+panel_id,plot_type,title,input_csv,input_csv_secondary,out_rel
+fig01a_crossmodal_burden_logfc,scatter_burden_logfc,Cross-modal miRNA burden vs GSE188646 aging logFC,exploratory_crossmodal_gene_burden_vs_aging_logfc.csv,,figures/sa_bundle/fig01a_crossmodal_burden_logfc.png
+fig01b_crossmodal_perm_null,hist_perm_rho,Gene-shuffle null for Spearman rho (burden vs logFC),exploratory_crossmodal_permutation_rho_gene_shuffle.csv,exploratory_crossmodal_mirna_aging_summary.json,figures/sa_bundle/fig01b_crossmodal_perm_null.png
+fig02a_gse188646_volcano,volcano_logfc_padj,GSE188646 pseudobulk DE volcano,gse188646_young_vs_aged_deg.csv,,figures/sa_bundle/fig02a_gse188646_volcano.png
+fig03a_crossmodal_burden_meta_dl,scatter_burden_beta_dl,Cross-modal burden vs two-cohort DL meta beta (sensitivity),exploratory_crossmodal_burden_vs_two_cohort_meta.csv,,figures/sa_bundle/fig03a_crossmodal_burden_meta_dl.png
+fig04a_sa_niche_gsea_nes,bar_sa_nsc_nes,Mechanotransduction/neuromodulation prior sets (LIFU-motivated) prerank GSEA NES,exploratory_sa_nsc_lifu_fgsea_curated_sets.csv,,figures/sa_bundle/fig04a_sa_niche_gsea_nes.png
+fig01c_union_abs_logfc_violin,violin_abs_logfc_union,Aging lability: |logFC| in miRNA-target union vs non-union,gse188646_young_vs_aged_deg.csv,mirna_targets_long.csv,figures/sa_bundle/fig01c_union_abs_logfc_violin.png
+fig_pathway_convergence,pathway_convergence,Hallmark stress ORA and Jaccard overlap with Piezo1/LIFU priors,,,figures/sa_bundle/fig_pathway_convergence.png
+fig_niche_lability_localization,niche_lability_localization,Third-ventricle niche localization of miRNA-target aging lability,,,figures/sa_bundle/fig_niche_lability_localization.png
+fig_crosscohort_lability_replication,crosscohort_lability_replication,Cross-cohort sensitivity of union |logFC| attenuation,,,figures/sa_bundle/fig_crosscohort_lability_replication.png
+fig_niche_hypomap_external_validation,niche_hypomap_external_validation,HypoMap external third-ventricle niche validation,,,figures/sa_bundle/fig_niche_hypomap_external_validation.png
+fig_external_spatial_validation,external_spatial_validation,External spatial/aging reference validation (Jin ABC MERFISH RSTE3),,,figures/sa_bundle/fig_external_spatial_validation.png
+fig_allen_ish_marker_anatomy,allen_ish_marker_anatomy,Allen ISH marker anatomy supplementary heatmap,,,figures/sa_bundle/fig_allen_ish_marker_anatomy.png

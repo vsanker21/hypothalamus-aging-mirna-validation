@@ -1,0 +1,168 @@
+Framing: hypothalamic stem / niche biology, aging omics, and LIFU as a candidate interface
+==========================================================================================
+Audience: Science Advances–style integrative hypothesis (computational + orthogonal lanes).
+Does not change locked claims in SCIENTIFIC_STORY_ONE_PAGE.txt; extends narrative planning only.
+Last updated: 2026-05-14.
+
+------------------------------------------------------------------------------------------
+ONE-SENTENCE NOVELTY (reviewer-stable)
+------------------------------------------------------------------------------------------
+Adult hypothalamic stem / progenitor– and niche-associated molecular programs (including
+htNSC-linked miRNA regulatory structure) can be quantified alongside aging-associated
+hypothalamic remodeling in orthogonal public data; low-intensity focused ultrasound (LIFU)
+is framed as a physically constrained, spatially addressable candidate modality to bias
+niche signaling — with explicit prediction/falsification and separate evidence lanes until
+dose-resolved in vivo experiments exist.
+
+------------------------------------------------------------------------------------------
+CORE CONCEPT (three pillars, not merged statistically)
+------------------------------------------------------------------------------------------
+Pillar A — MOESM / Zhang layer (primary in-repo experimental design)
+  htNSC-biased miRNA and exosome / nanoparticle phenotypes; Sox2 / ARC-relevant readouts.
+  Outputs: run_pipeline.py, outputs/mirna_*, figures, REPORT_SUMMARY.txt.
+
+Pillar B — Hypothalamic aging cell-state / pseudobulk layer (context, not replication)
+  GSE188646 pseudobulk DE, stratified DE, PROGENy / DoRothEA / Hallmark fgsea-camera-fry,
+  cluster marker mapping, HypoMap GEO-axis + optional CELLxGENE C66/C185 reference Spearman.
+  Outputs: outputs/gse188646_*, outputs/gse188646_cluster_annotation/,
+  outputs/gse188646_hypomap_mapping/, exploratory_*,
+  exploratory_sa_nsc_lifu_* (curated niche / LIFU priors; see COMPUTATIONAL SUITE below).
+
+Pillar C — LIFU / tFUS (orthogonal physics + safety + regulatory precedents)
+  outputs/LIFU_evidence_layer.txt; data/provenance/TRANSLATION_REGULATORY_FRAMING.txt.
+  Not statistically merged with omics in this repository.
+
+Bridge (hypothesis only): niche-state programs measurable in (B) are candidate targets for
+indirect modulation via mechanisms plausible under (C); priors from (A) constrain which
+regulatory channels are biologically coherent with htNSC biology.
+
+------------------------------------------------------------------------------------------
+FIGURE PANEL PLAN (titles + primary repo outputs to cite)
+------------------------------------------------------------------------------------------
+Fig 1 | Hypothalamic niche / NSC context and scope of claims
+  Panel a: anatomy schematic (external figure or hand-drawn in manuscript).
+  Panel b: claim ladder (this file, Table 1) as boxed summary.
+  Cite: SCIENTIFIC_STORY_ONE_PAGE.txt.
+
+Fig 2 | htNSC miRNA program and target-structure (MOESM-first)
+  miRNA htNSC vs astrocyte / hippo NSC; permutation / specificity where implemented.
+  Cite: outputs/mirna_htnsc_astrocyte_summary.csv, mirna_htnsc_specificity_permutation.csv,
+  top_htnsc_mirnas_for_targets.csv, mirna_targets_long.csv, mirna_target_union_genes.csv.
+
+Fig 3 | Cross-modal coupling + negative controls (aging DE vs target burden; exploratory)
+  Observed Spearman; gene-shuffle; random miRNA sets; stratified nulls (se, degree, GMT-wide).
+  Optional split: burden–logFC correlation restricted to curated niche-union genes vs remainder
+  (exploratory_sa_nsc_lifu_burden_logfc_by_niche_subset.csv).
+  Cite: exploratory_crossmodal_*, exploratory_negative_controls_*,
+  data/provenance/JOURNAL_TIER_COMPUTATIONAL_README.txt.
+
+Fig 4 | Hypothalamic aging pseudobulk programs (female nucleus cohort)
+  Volcano / ranked density; optional forest for meta if two-cohort meta run.
+  Optional small-GMT panels (niche / glia / LIFU-biophysics priors; hypothesis generation only):
+  prerank GSEA vs sa_nsc_lifu_curated_sets.gmt; mean log1p-CPM module scores Young vs Aged;
+  Fisher overlap of htNSC miRNA-target union vs each prior set (miRTarBase universe).
+  Cite: outputs/gse188646_young_vs_aged_deg.csv, exploratory_meta_DE_two_cohort_DL.csv (if present),
+  outputs/exploratory_fgsea_hallmark_pseudobulk_de_ranks.csv, progeny / dorothea exploratory CSVs,
+  outputs/exploratory_sa_nsc_lifu_fgsea_curated_sets.csv,
+  outputs/exploratory_sa_nsc_lifu_pseudobulk_module_young_vs_aged.csv,
+  outputs/exploratory_sa_nsc_lifu_fisher_targets_vs_curated_sets.csv.
+
+Fig 5 | Cell-state geometry vs references (descriptive, contrast-aware)
+  Cluster marker modules; HypoMap GEO axes; optional HypoMap CELLxGENE Spearman (C185/C66).
+  Optional flags: niche-like reference types and cluster-level glial / tanycyte heuristic tags
+  (exploratory_sa_nsc_lifu_hypomap_ref_flags.csv, exploratory_sa_nsc_lifu_cluster_niche_flags.csv).
+  Cite: outputs/gse188646_cluster_annotation/cluster_putative_labels.csv,
+  outputs/gse188646_hypomap_mapping/hypomap_axis_spearman.csv,
+  hypomap_custom_ref_spearman.csv (if built).
+
+Fig 6 | LIFU as orthogonal interface lane (not merged with omics)
+  Safety / ITRUSST / human wearable precedent summary as structured bullets + timeline.
+  Cite: outputs/LIFU_evidence_layer.txt.
+
+Fig 7 | Predictions & falsifiers (pre-experimental; “looks like validation planning”)
+  Table: if niche pathway X shifts under LIFU-relevant perturbation classes, which signatures
+  in (B) should move; what observation would falsify the bridge.
+  Cite: Table 2 below (no new computation required).
+
+Fig 8 | Roadmap to decisive experiment (minimal orthogonal validation)
+  Pre-specified endpoints: ultrasound reporting checklist + NSC-enriched readouts +
+  aging-relevant hypothalamic endpoints in an appropriate model (see LIFU layer section 4).
+
+------------------------------------------------------------------------------------------
+TABLE 1 — CLAIMS LADDER (what you can say at each tier)
+------------------------------------------------------------------------------------------
+Tier 0 (primary, MOESM-supported): htNSC-biased miRNA patterns; exosome / nanoparticle tables;
+  cytokine / Sox2-ARC readouts as reported in Zhang 2017 supplementary processing.
+
+Tier 1 (computational, exploratory): cross-modal burden vs GSE188646 logFC with nulls;
+  Fisher / GSEA / PROGENy / DoRothEA; cluster–reference Spearman; curated niche / LIFU-prior
+  small-GMT prerank GSEA and pseudobulk module tests (exploratory_sa_nsc_lifu_*) — all labelled
+  exploratory where applicable; contrast-mismatch disclosures for HypoMap GEO vs aging.
+
+Tier 2 (orthogonal narrative, not statistical merge): LIFU safety / physics / regulatory
+  precedents as a modality story parallel to omics.
+
+Tier 3 (non-claims until new experiments): LIFU “rejuvenates” NSCs; ultrasound proves aging
+  modulation; exosome miRNA causes hypothalamic aging changes in vivo.
+
+------------------------------------------------------------------------------------------
+TABLE 2 — PREDICTIONS & FALSIFIERS (bridge hypotheses; edit when pre-registering an experiment)
+------------------------------------------------------------------------------------------
+Prediction P1: If LIFU biases neuroinflammatory / glial tone without direct NSC transduction,
+  aging-associated glial signatures in pseudobulk should be more sensitive than neuronal
+  programs to acute perturbation in an appropriate pilot — falsifier: no glial shift but
+  strong unrelated cortical off-target expression changes.
+
+Prediction P2: If miRNA-target burden is biologically coupled to aging logFC beyond detection,
+  stratified nulls (outputs/exploratory_negative_controls_*) should yield systematically small
+  empirical p under a true coupling — falsifier: coupling only appears without any precision
+  or GMT-wide control (suggests residual confounding).
+
+Prediction P3: If hypothalamic NSC niche programs are coherent across modalities, independent
+  spatial or sorted-cell datasets (not in this repo) should partially recapitulate direction
+  — falsifier: strong contradiction in independent snRNA atlases with matched age/sex design.
+
+------------------------------------------------------------------------------------------
+MANUSCRIPT EMPHASIS (pick one spine for figure order)
+------------------------------------------------------------------------------------------
+Option X — Biology-first: Fig 2 → 4 → 5 → 3 → 6 → 7 → 8.
+Option Y — Interface-first: Fig 6 → 1 → 2 → 4 → 3 → 5 → 7 → 8.
+
+------------------------------------------------------------------------------------------
+COMPUTATIONAL SUITE — exploratory_sa_nsc_lifu_* (Science Advances framing; exploratory)
+------------------------------------------------------------------------------------------
+Purpose: tie Pillar B aging DE / pseudobulk to small, citable literature priors (NSC-like,
+radial glia–like, tanycyte–ependymal, OPC, microglia, mechanosensitive / Ca2+ signaling,
+neuroinflammatory axes) without merging Pillar C (LIFU) statistically.
+
+Module: feasibility_study/src/sa_nsc_lifu_computational_suite.py (invoked at end of
+run_extended.py after journal-tier negative controls).
+
+Primary outputs (under outputs/ when prerequisites exist):
+  - sa_nsc_lifu_curated_sets.gmt — priors intersected with gse188646_young_vs_aged_deg gene universe.
+  - exploratory_sa_nsc_lifu_fgsea_curated_sets.csv — gseapy prerank GSEA (499 perm); DE rank metric
+    uses sign(logFC) * -log10(p_val); gene symbols uppercased for GMT matching.
+  - exploratory_sa_nsc_lifu_fisher_targets_vs_curated_sets.csv — Fisher overlap of mirna_target_union_genes
+    vs each prior set (miRTarBase Mus musculus gene universe; ext set size >= 5 in universe).
+  - exploratory_sa_nsc_lifu_pseudobulk_module_young_vs_aged.csv — mean log1p-CPM module score per
+    sample group, Welch t-test Young vs Aged (requires gse188646_pseudobulk_counts.mtx + metadata).
+  - exploratory_sa_nsc_lifu_burden_logfc_by_niche_subset.csv — Spearman(weighted_burden, logFC)
+    for all genes with burden vs in curated niche-union vs not (requires cross-modal CSV).
+  - exploratory_sa_nsc_lifu_hypomap_ref_flags.csv — optional HypoMap custom ref table with
+    niche_like flag; exploratory_sa_nsc_lifu_hypomap_rho_summary_by_niche_flag.csv when built.
+  - exploratory_sa_nsc_lifu_cluster_niche_flags.csv — cluster_putative_labels with heuristic
+    niche_glial_flag when cluster annotation exists.
+  - exploratory_sa_nsc_lifu_suite_summary.json — provenance stub (completed_utc, methodology_note).
+
+Science Advances fit: explicit priors, permutation or stratum-aware controls elsewhere in the
+stack, orthogonal LIFU lane kept separate, and language capped at Tier 1 (exploratory) unless
+independently replicated with matched contrasts.
+
+------------------------------------------------------------------------------------------
+REPRODUCIBILITY
+------------------------------------------------------------------------------------------
+Recompute omics stack: RUN_ORDER.txt steps 1–2; GSE188646 extended launcher for cluster + HypoMap
+maps; python run_extended.py from feasibility_study/ for cohort2+DL meta (default), cross-modal,
+negative controls, SA niche/LIFU-prior suite, figure PNG bundle, and outputs/SA_COMPLETENESS_CHECK.txt;
+data/provenance/DATA_ACQUISITION_AND_QC_RATIONALE.txt for fetch hooks; VERSION_SNAPSHOT.txt after
+environment changes.

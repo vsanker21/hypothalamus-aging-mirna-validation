@@ -1,0 +1,13 @@
+TRANSLATION AND REGULATORY FRAMING (reviewer / regulator primer)
+Last updated: 2026-05-14
+
+MECHANISTIC HYPOTHESIS (academic)
+- Hypothalamic niche biology, NSC state, exosomal miRNA signalling, and aging-associated inflammation can be articulated as a coherent mechanistic narrative when tied to MOESM + orthogonal datasets with explicit layer separation.
+
+THERAPEUTIC / INTERVENTION CLAIM (LIFU or any device)
+- Must be separated from the omics feasibility story: dose–response, targeting accuracy, on- and off-target bioeffects, thermal and mechanical safety, and durability endpoints are not demonstrated in this repository.
+- Map early milestones to device class: research ultrasound / investigational device exemptions vs clinical indications — consult institutional regulatory offices before human subjects language appears in proposals.
+
+WHAT REGULATORS / REVIEWERS WILL ASK
+- Preclinical model relevance, blinding, sham controls, and biomarker validation for any CNS intervention claim.
+- Independent replication cohorts for molecular signatures intended to support translation.

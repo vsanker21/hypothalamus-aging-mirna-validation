@@ -1,0 +1,15 @@
+GEO GSE208355 (HypoMap-related supplementary tables on GEO) distributes DESeq2 tables for
+neuron-population IP/input contrasts (e.g. pomc_ip_vs_pomc_input). These are not equivalent
+to "young vs aged whole hypothalamus" comparisons from GSE188646. Do not interpret overlap
+statistics with miRNA targets as aging validation unless you substitute a user-supplied
+age-stratified DE list (e.g. from the GSE188646 Seurat object via the provided R script).
+
+ADDITIONAL IN-REPO USE (cluster reference geometry; 2026-05-14)
+- r/gse188646_hypomap_reference_mapping.R reads the filtered concat (or downloads the same
+  three supplementary CSV.gz files) and correlates / regresses per-seurat_cluster mean
+  expression (GSE188646 RNA data layer) against gene-level log2FoldChange weights for each
+  contrast. Outputs: outputs/gse188646_hypomap_mapping/ (see HYPomap_REFERENCE_MAPPING_README.txt).
+  This is still NOT the full HypoMap scRNA atlas; optional gene-by-cell-type mean matrices can be
+  supplied via env GSE188646_HYPOMAP_REF_EXPR_CSV for Spearman mapping to user-defined types.
+  For the full CELLxGENE atlas object, build instructions and defaults are in
+  data/provenance/HypoMap_CELLxGENE_REFERENCE_MATRIX.txt (tools/download_hypomap_cellxgene_h5ad.py).

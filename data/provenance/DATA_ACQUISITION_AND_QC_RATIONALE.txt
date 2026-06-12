@@ -1,0 +1,100 @@
+Programmatic data acquisition, verification, and scientific rationale
+========================================================================
+Audience: anyone reproducing run_extended.py / journal-tier analyses who needs
+canonical sources, QC checks, and explicit opt-in for large downloads.
+
+Last updated: 2026-05-14.
+
+--------------------------------------------------------------------------------
+1) Principles (accuracy and reproducibility)
+--------------------------------------------------------------------------------
+Official mirrors first
+  Use NLM / GEO HTTPS FTP paths for series supplementary files so the artifact
+  identity is unambiguous (same checksum policy as GEO, not a random mirror).
+
+Size and integrity where the protocol allows
+  GSE188646 RDS.gz: stream download compares bytes to Content-Length when the
+  server sends it; decompressed RDS must exceed a conservative minimum size to
+  catch truncated gzip (see tools/download_gse188646_rds.py).
+
+HypoMap CELLxGENE h5ad: optional exact-byte check against the known stable asset
+  revision (see tools/download_hypomap_cellxgene_h5ad.py); update EXPECTED_BYTES
+  if CELLxGENE publishes a new revision of the same dataset UUID.
+
+GMT text libraries (miRTarBase, MSigDB Hallmark via Enrichr)
+  After download, validate tab-separated structure so HTML error pages or empty
+  responses cannot silently corrupt Fisher / GSEA universes (src/data_acquisition.py).
+
+Contrast discipline (not a download issue, but accuracy)
+  HypoMap GSE208355 supplementary DESeq2 tables are IP/input contrasts, not
+  hypothalamus young-vs-aged; GSE188646 pseudobulk is a different design. Never
+  merge p-values as if exchangeable without the disclosures in EXTENDED_REPORT.txt.
+
+--------------------------------------------------------------------------------
+2) What is fetched automatically during a normal run
+--------------------------------------------------------------------------------
+run_extended.py (after run_pipeline.py for MOESM-derived miRNA table):
+  - miRTarBase_2017 and MSigDB_Hallmark_2020 GMTs into data/cache/ on first use,
+    then structure-validated immediately after ensure_* (fail-fast on corrupt cache).
+  - HypoMap GSE208355 supplementary CSV.gz files: fetched per overlap_fisher.load_hypomap_de_union
+    into memory / outputs (see run_extended HYPOMAP_DESEQ_URLS).
+  - GenAge models_genes.zip: tier-2 path (genage_context.ensure_genage_models_table).
+  - decoupler: PROGENy / DoRothEA resources are resolved by the decoupler package
+    when pseudobulk .mtx exists (package cache; cite OmniPath / decoupler docs).
+
+--------------------------------------------------------------------------------
+3) Optional environment-driven acquisition (large or refresh)
+--------------------------------------------------------------------------------
+AUTO_FETCH_PUBLIC_DATA=1
+  Re-run ensure + validation for miRTarBase and Hallmark GMTs (useful after cache
+  corruption or when pinning a fresh download before freezing VERSION_SNAPSHOT).
+
+AUTO_FETCH_GSE188646_RDS=1
+  Runs tools/download_gse188646_rds.py for the canonical decompressed path under
+  data/ when missing or too small. Requires sufficient disk space and time.
+
+AUTO_FETCH_HYPOMAP_H5AD=1
+  Runs tools/download_hypomap_cellxgene_h5ad.py into data/references/ when the
+  reference atlas is missing. Large (~3.5 GiB); CELLxGENE / publisher terms apply.
+
+CLI alternative (same logic, explicit flags):
+  python tools/fetch_public_reference_data.py --help
+
+--------------------------------------------------------------------------------
+4) GSE188646 RDS resolution (no surprise overrides)
+--------------------------------------------------------------------------------
+Order implemented in src/data_acquisition.resolve_gse188646_rds_path():
+  (a) If GSE188646_RDS is set and the path exists, that path is used.
+  (b) Else if data/GSE188646_hypo.integrated.final.20210719.RDS exists and is
+      >= 500 MiB, it is used so run_extended can run without exporting the env
+      after a canonical download.
+  (c) If GSE188646_RDS points to a missing file, the pipeline does not silently
+      substitute another path; fix the env or place the RDS as documented.
+
+--------------------------------------------------------------------------------
+5) What still requires deliberate human / registry steps (by design)
+--------------------------------------------------------------------------------
+MOESM spreadsheets: supplied by the publication; path via MOESM_GLOB / config
+  (not re-hosted here).
+
+GEOparse SOFT pulls: require GEOparse + network; used for sample metadata tables.
+
+snRNA deconvolution, causal mediation, joint LIFU–omics models: not implemented in
+  this repository; they need new assays or pre-registered causal designs beyond
+  public DE overlap.
+
+--------------------------------------------------------------------------------
+5b) Completeness reporting (Science Advances bundle)
+--------------------------------------------------------------------------------
+After each run_extended.py pass, outputs/SA_COMPLETENESS_CHECK.txt records whether cohort2 limma,
+two-cohort DL meta, cross-modal meta-sensitivity tables, and the five FIGURE_PANEL_MANIFEST PNGs
+are present (same text is appended to outputs/EXTENDED_REPORT.txt). The checklist in run_extended.py
+also covers MOESM prerequisite CSVs, journal-tier null summaries, SA suite outputs, and optional Tier-2 .mtx.
+Submission-oriented gaps (vector figures, Zenodo, third cohort narrative) are listed in
+data/provenance/SCIENCE_ADVANCES_PENDING_CHECKLIST.txt.
+
+--------------------------------------------------------------------------------
+6) Index row
+--------------------------------------------------------------------------------
+See also: data/provenance/EXTERNAL_DATA_PROVENANCE_TABLE.csv (resource_id
+DATA_ACQUISITION_POLICY) and RUN_ORDER.txt step 2.

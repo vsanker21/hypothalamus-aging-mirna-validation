@@ -1,0 +1,17 @@
+GenAge / Human Ageing Genomic Resources (HAGR) — data use
+
+Source: Genomics of Ageing and Rejuvenation Lab, models gene set distributed as
+https://genomics.senescence.info/genes/models_genes.zip (file genage_models.csv inside the archive).
+
+This pipeline downloads that archive into feasibility_study/data/cache/ for reproducibility.
+The upstream site states that data are provided for research purposes; cite the GenAge database
+and the original publications referenced therein. Do not redistribute the raw archive as your
+own product; link to HAGR/GenAge instead.
+
+Recommended citations (verify current wording on https://genomics.senescence.info/ before publication):
+- Tacutu R, et al. Human Ageing Genomic Resources: new and updated databases. Nucleic Acids Res. 2018.
+- de Magalhaes JP, et al. The Human Ageing Genomic Resources: online databases and tools for
+  comparative studies in longevity and ageing. Nucleic Acids Res. 2009.
+
+Interpretation: GenAge “model organism” entries are literature-curated longevity-associated genes,
+not a tissue-specific hypothalamus signature. Overlap with miRNA targets is exploratory context only.

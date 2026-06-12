@@ -1,0 +1,11 @@
+GEO supplementary file for GSE188646:
+  GSE188646_hypo.integrated.final.20210719.RDS.gz
+is a Seurat v4 object (RNA + integrated assays; mm10; 10x). Place the decompressed .RDS
+next to this file or set RDS_PATH in r/extract_gse188646_young_vs_aged.R, then run R to emit
+outputs/gse188646_young_vs_aged_deg.csv for Python overlap tests.
+
+Programmatic fetch (official NCBI FTP over HTTPS, same file GEO serves):
+  python tools/download_gse188646_rds.py --output data/GSE188646_hypo.integrated.final.20210719.RDS
+  Or:  .\\run_gse188646_extended.ps1 -Download
+
+PubMed: 36285248 | DOI: 10.1038/s43587-022-00246-4

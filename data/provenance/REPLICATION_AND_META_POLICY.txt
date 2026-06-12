@@ -1,0 +1,19 @@
+REPLICATION COHORTS AND CROSS-STUDY META-ANALYSIS POLICY
+Last updated: 2026-05-14
+
+CRITERIA FOR A SECOND PUBLIC “MATCHED” ANCHOR (hypothalamus aging, mouse, sex-aware)
+- Same species and broad region class (hypothalamus / ventral forebrain nuclei), or explicit mapping rationale if region differs.
+- Young vs aged (or equivalent defined age bins) with biological replication (independent animals), not only technical replicates.
+- Gene identifiers harmonized to the same symbol space as the miRTarBase mmu target universe before overlap or meta statistics.
+- Contrasts documented in one row in EXTERNAL_DATA_PROVENANCE_TABLE.csv (URL, date retrieved, exact contrast string).
+
+WHEN META-ANALYSIS IS APPROPRIATE
+- Only after at least two contrast-matched DE or pseudobulk signatures exist; use methods that model study-specific variance (e.g. random-effects meta on effect sizes), not Stouffer on non-exchangeable Fisher p-values.
+
+CURRENT REPO STATUS
+- GSE188646 pseudobulk DE + HypoMap IP/input DESeq2 contrasts are intentionally not meta-analysed as a single effect.
+- Implemented (optional): contrast-matched second cohort GSE87102 (C57BL/6 hypothalamus microarray, young vs aged)
+  plus DerSimonian–Laird meta on logFC + SE vs GSE188646 pseudobulk by default in run_extended.py
+  (opt-out: GSE188646_SKIP_COHORT2_META=1 or GSE188646_RUN_COHORT2_META=0)
+  (outputs/exploratory_meta_DE_two_cohort_DL.csv; see data/replication/META_TWO_COHORTS_README.txt).
+- Extra GEO sample tables (e.g. GSE94940, GSE161219) are metadata context only until a harmonised DE table with matched contrast is ingested.

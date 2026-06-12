@@ -1,0 +1,49 @@
+Science Advances suitability — what is already automated vs what remains (computational focus)
+===============================================================================================
+Last updated: 2026-05-15. Pair with outputs/SA_COMPLETENESS_CHECK.txt after each run_extended.py.
+
+--------------------------------------------------------------------------------
+A) Already in this repository (automated or manifest-driven)
+--------------------------------------------------------------------------------
+- MOESM-first miRNA / phenotype tables (run_pipeline.py).
+- Extended stack: miRTarBase union, ORA/GSEA, Fisher, HypoMap GEO supplementary overlap (with contrast disclosure),
+  multi-library ORA, bootstrap stability, GSE188646 sensitivity sweeps.
+- Journal tier: cross-modal burden vs aging DE + permutation + random-miRNA nulls; stratified negative controls.
+- Two-cohort GSE87102 limma + DL meta (default ON) and cross-modal × meta sensitivity tables.
+- SA niche / LIFU-prior exploratory suite (small GMT GSEA, Fisher, pseudobulk modules, optional HypoMap flags).
+- Tier-2: R fgsea, GenAge, decoupler PROGENy / DoRothEA, pseudobulk fgsea-camera-fry when .mtx exists.
+- Figure PNG bundle from FIGURE_PANEL_MANIFEST.csv (default ON); completeness block in EXTENDED_REPORT +
+  outputs/SA_COMPLETENESS_CHECK.txt.
+
+--------------------------------------------------------------------------------
+B) Required to “have all outputs” on your machine (environment, not code gaps)
+--------------------------------------------------------------------------------
+1. Run run_pipeline.py first (mirna_htnsc_astrocyte_summary.csv and MOESM inputs).
+2. GSE188646 DE: RDS or canonical data/*.RDS + R (edgeR pseudobulk); export counts for full Tier-2:
+   GSE188646_EXPORT_COUNTS=1 when re-running pseudobulk.
+3. Cohort2 + meta: R + Bioconductor GEOquery + limma + network for GEO download; or set
+   GSE188646_SKIP_COHORT2_META=1 and accept MISSING lines in SA_COMPLETENESS_CHECK.txt for meta-dependent figs.
+4. Python deps per requirements.txt; optional gseapy / decoupler / statsmodels as already used.
+
+--------------------------------------------------------------------------------
+C) Pending for Science Advances *submission quality* (mostly manuscript + policy, not repo code)
+--------------------------------------------------------------------------------
+1. Primary-claim lock: one lead integrative claim (e.g. cross-modal + nulls) written as primary in SAP;
+   all other arms explicitly exploratory — align figure order and Results text to STATISTICAL_ANALYSIS_PLAN.txt.
+2. Figure production: replace or supplement PNGs with vector PDF/SVG for print; unified typography; panel letters
+   matching FIGURE_PANEL_MANIFEST / FRAMING doc.
+3. Replication narrative: third independent public cohort OR spatial / sorted-cell reference with matched discussion
+   of mismatch (sex, assay, region) — code can ingest new DE tables but curating the contrast is human work.
+4. Archival reproducibility: frozen conda/renv lock + Zenodo (data too large for Git) + one README “reproduce Fig. 1–N”.
+5. Limitations paragraph: HypoMap ≠ GSE188646 contrast; meta k=2 tau instability; pseudobulk vs single-cell;
+   miRTarBase as literature prior; no causal LIFU–omics merge.
+6. Optional prestige add-ons: preregistered prediction list tested on a post-hoc public split; sensitivity to
+   target-universe version; reviewer-requested leave-one-cohort-out already partially supported by sensitivity CSVs.
+
+--------------------------------------------------------------------------------
+D) Quick health check
+--------------------------------------------------------------------------------
+After:  python run_pipeline.py
+        python run_extended.py
+Inspect: outputs/SA_COMPLETENESS_CHECK.txt — every non-OPTIONAL line should read OK for a full spine;
+OPTIONAL absent is acceptable if you do not need PROGENy / camera / fry in the main story.

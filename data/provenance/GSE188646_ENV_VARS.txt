@@ -1,0 +1,101 @@
+GSE188646 integration — environment variables (Windows PowerShell examples)
+
+Programmatic acquisition (see data/provenance/DATA_ACQUISITION_AND_QC_RATIONALE.txt):
+  Optional before or during python run_extended.py:
+    $env:AUTO_FETCH_PUBLIC_DATA = "1"      # refresh miRTarBase + Hallmark GMTs; validate structure
+    $env:AUTO_FETCH_GSE188646_RDS = "1"    # download canonical RDS to data/ if missing (large; long run)
+    $env:AUTO_FETCH_HYPOMAP_H5AD = "1"     # download CELLxGENE HypoMap h5ad to data/references/ if missing
+  Or: python tools/fetch_public_reference_data.py --all
+  RDS path resolution: GSE188646_RDS if set and valid; else data/GSE188646_hypo.integrated.final.20210719.RDS
+  if present and >= 500 MiB (no env required after a canonical download).
+
+Canonical launcher (recommended): run_gse188646_extended.ps1 from feasibility_study/
+
+  cd feasibility_study
+  .\run_gse188646_extended.ps1
+
+By default the launcher: auto-downloads the official .RDS if missing (use -NoAutoDownload to require a pre-placed file),
+verifies decompressed size (>= 1 GiB), sets GSE188646_FORCE_PSEUDOBULK=1 and GSE188646_EXPORT_COUNTS=1,
+sets GSE188646_STRATUM_COL=seurat_clusters for stratified pseudobulk (-NoStratified or -StratumCol '' to skip),
+then runs python run_extended.py.
+
+  .\run_gse188646_extended.ps1 -Download
+  .\run_gse188646_extended.ps1 -RdsPath "D:\path\to\GSE188646_hypo.integrated.final.20210719.RDS"
+  .\run_gse188646_extended.ps1 -StratumCol "RNA_snn_res.0.5"
+  .\run_gse188646_extended.ps1 -NoStratified
+  .\run_gse188646_extended.ps1 -ForcePseudobulkFromRds:$false
+  .\run_gse188646_extended.ps1 -HypomapRefExprCsv "data\references\hypomap_cellxgene_C185_named_mean_X_min200.csv"
+  .\run_gse188646_extended.ps1 -HypomapRefExprCsv "data\references\hypomap_cellxgene_C66_named_mean_X.csv"
+
+Optional HypoMap-style custom reference (wide CSV: column gene + one numeric column per reference cell type):
+
+  -HypomapRefExprCsv "path\to\means.csv"  (relative paths resolve under feasibility_study/)
+
+  sets GSE188646_HYPOMAP_REF_EXPR_CSV for r/gse188646_hypomap_reference_mapping.R so outputs may include
+
+  outputs/gse188646_hypomap_mapping/hypomap_custom_ref_spearman.csv (requires sufficient gene overlap; see R script).
+
+  Build the matrix from a local HypoMap h5ad with: python tools\build_hypomap_ref_mean_matrix.py build ...
+
+-Download fetches the official supplementary GSE188646_hypo.integrated.final.20210719.RDS.gz
+from NCBI GEO FTP (HTTPS), verifies Content-Length, decompresses to the default data\ path, then runs Python.
+
+Or download only with Python:
+
+  python tools\download_gse188646_rds.py --output data\GSE188646_hypo.integrated.final.20210719.RDS
+
+Default RDS path if you omit -RdsPath:
+
+  feasibility_study\data\GSE188646_hypo.integrated.final.20210719.RDS
+
+Place the GEO object there, or pass -RdsPath to your actual file.
+
+Pseudobulk DE + optional counts (recommended over per-nucleus Wilcox for multi-animal designs):
+
+  $env:GSE188646_RDS = "C:\path\to\GSE188646_hypo.integrated.final.20210719.RDS"
+  $env:GSE188646_EXPORT_COUNTS = "0"   # default in automation: skip large count matrix
+  python run_extended.py
+
+Export sparse counts (.mtx + row/column name CSVs) for decoupler PROGENy in Tier-2:
+
+  $env:GSE188646_RDS = "C:\path\to\...\RDS"
+  $env:GSE188646_EXPORT_COUNTS = "1"
+  $env:GSE188646_FORCE_PSEUDOBULK = "1"   # only if outputs/gse188646_young_vs_aged_deg.csv already exists
+  python run_extended.py
+
+PROGENy / DoRothEA + pathway–burden coupling + STRING bridge (full Tier-2 + new journal layers):
+
+  Set counts export **before** (or with) pseudobulk so R writes outputs/gse188646_pseudobulk_counts.mtx.
+  Optionally auto-run stratified pseudobulk on seurat_clusters when strata manifest is missing.
+  On air-gapped machines, skip STRING (no string-db.org).
+
+  cd feasibility_study
+  $env:GSE188646_RDS = "data\GSE188646_hypo.integrated.final.20210719.RDS"   # or your full path
+  $env:GSE188646_EXPORT_COUNTS = "1"
+  $env:GSE188646_FORCE_PSEUDOBULK = "1"   # if DE already exists and you need to regenerate counts only
+  $env:GSE188646_AUTO_STRATIFIED_PSEUDOBULK = "1"   # optional: strata under outputs/gse188646_strata/
+  # $env:STRING_BRIDGE_OFFLINE = "1"       # uncomment on machines without outbound HTTPS
+  python run_extended.py
+
+  Or use the bundled launcher (sets export counts + stratified column by default):
+
+  .\run_gse188646_extended.ps1
+
+Optional memory / scale (large snRNA objects):
+
+  $env:GSE188646_CELL_AGG_CHUNK = "60000"   # sum counts per orig.ident in cell blocks (same pseudobulk result)
+  $env:GSE188646_STRATUM_COL = "seurat_clusters"   # also run per-stratum pseudobulk DE -> outputs/gse188646_strata/
+  $env:GSE188646_RUN_COHORT2_META = "0"   # legacy: skip two-cohort meta (same as SKIP_COHORT2_META=1)
+  $env:GSE188646_SKIP_COHORT2_META = "1"  # skip GSE87102 limma + DL meta (no R / faster CI)
+  $env:SKIP_SA_FIGURE_BUNDLE = "1"       # skip manifest PNG build at end of run_extended.py
+
+Strata cross-modal diagnostics + supplementary Word (optional, after strata CSV exists):
+
+  $env:RUN_CROSSMODAL_STRATA_DIAGNOSTICS = "1"
+  $env:RUN_CROSSMODAL_STRATA_SUPPLEMENTARY_DOCX = "1"   # also writes outputs/manuscript/Supplementary_Figures_Strata_Crossmodal.docx
+  python run_extended.py
+
+Notes:
+- Requires R with Seurat, edgeR, dplyr, Matrix for pseudobulk_edgeR_gse188646.R.
+- Tier-2 R fgsea requires Bioconductor fgsea (installed automatically on first Rscript run if BiocManager is available).
+- Stouffer combines Fisher P-values from GSE188646 and HypoMap only when both are available; contrasts differ in biology (descriptive).

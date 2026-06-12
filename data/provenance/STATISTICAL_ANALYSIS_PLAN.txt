@@ -1,0 +1,57 @@
+STATISTICAL ANALYSIS PLAN (repository scope) — pre-specification for MOESM + public anchors
+Last updated: 2026-05-15
+
+1) PRIMARY ANALYSIS FAMILIES (pre-specified for this computational repo)
+A. Zhang MOESM (run_pipeline.py)
+   - Primary: descriptive summaries and planned plots for miRNA, exosome/nanoparticle, cytokine, Sox2, and phenotype tables as loaded from MOESM spreadsheets.
+   - Multiplicity: where many miRNAs are scanned, use the implemented permutation or FDR strategy documented in outputs/REPORT_SUMMARY.txt (do not silently threshold-shop).
+B. Extended integration (run_extended.py)
+   - Primary: miRTarBase target union + Hallmark ORA + preranked GSEA (target multiplicity) + HypoMap Fisher (with contrast disclosure) + optional GSE188646 Fisher at padj<=0.05 for DE ∩ miRTarBase universe.
+   - Exploratory (pre-labelled outputs): GSE188646 padj<=0.1 Fisher; top-200 / top-500 rank-score DE gene sets; pseudobulk Hallmark fgsea (multilevel when available) on DE ranks; limma camera and fry on pseudobulk log-CPM; DoRothEA TF activity (mlm) on pseudobulk log-CPM; two-cohort DL meta (GSE188646 + GSE87102) by default when cohort1 DE exists (opt-out GSE188646_SKIP_COHORT2_META=1); multi-library ORA with global BH; bootstrap target stability.
+
+2) MULTIPLICITY CONTROL POLICY
+- Primary MOESM claims must reference the pipeline’s stated correction or permutation for high-dimensional miRNA scans.
+- Exploratory arms (exploratory_* files, multi-library ORA, rank-based DE sets) must be reported as sensitivity / hypothesis generation — not upgraded to primary endpoints post hoc.
+- Do not combine unrelated Fisher tests (HypoMap vs GSE188646) as confirmatory meta-evidence.
+
+3) POWER / DESIGN HONESTY
+- GSE188646 pseudobulk: 4 Young vs 4 Aged biological replicates (orig.ident) — adequate only for large, consistent pseudobulk effects; subtle cell-type–mixed programs may not reach FDR in bulked pseudobulk.
+- Interaction models (e.g. LIFU × age × cell type) are not supported by default in this repo — require dedicated experimental N and pre-registration.
+
+4) ENDPOINT MAPPING (for grants / IRB text)
+- Molecular panel: MOESM miRNA + exosome miRNA tables.
+- Tissue homeostasis panel: Sox2 / ARC counts where present.
+- Inflammation / secretome panel: cytokine tables where present.
+- Public anchor panel: GSE188646 + HypoMap + GenAge — contextual only unless contrast-matched replication is added (see REPLICATION_AND_META_POLICY.txt).
+
+5) VERSIONING
+- Record Python + R package versions whenever outputs are frozen for publication (tools/snapshot_versions.py → outputs/VERSION_SNAPSHOT.txt).
+
+6) OUTPUT ↔ ANALYSIS MAPPING (repository paths; exploratory outputs flagged)
+   Cross-modal primary (journal tier; exploratory)
+     - Per-gene burden + GSE188646 logFC: outputs/exploratory_crossmodal_gene_burden_vs_aging_logfc.csv
+     - Summary JSON: outputs/exploratory_crossmodal_mirna_aging_summary.json
+     - Gene-shuffle null draws: outputs/exploratory_crossmodal_permutation_rho_gene_shuffle.csv
+     - Random miRNA-set null: outputs/exploratory_crossmodal_random_mirna_set_rho_null.csv
+     - Two-cohort sensitivity (same burden vs DL meta beta; requires meta CSV): outputs/exploratory_crossmodal_burden_vs_two_cohort_meta.csv, outputs/exploratory_crossmodal_meta_cohort_sensitivity_summary.json
+   Stratified negative controls (exploratory)
+     - outputs/exploratory_negative_controls_gene_covariates.csv
+     - outputs/exploratory_negative_controls_stratified_perm_rhos.csv
+     - outputs/exploratory_negative_controls_summary.json
+   GSE188646 pseudobulk DE (context / Fisher anchor)
+     - outputs/gse188646_young_vs_aged_deg.csv (+ optional outputs/gse188646_pseudobulk_counts.mtx for Tier-2)
+   Two-cohort DL meta (exploratory; GSE188646 + GSE87102; default ON — GSE188646_SKIP_COHORT2_META=1 to skip):
+     - outputs/exploratory_meta_DE_two_cohort_DL.csv, outputs/exploratory_META_TWO_COHORT_DL_README.txt
+   SA niche / LIFU prior suite (exploratory)
+     - outputs/exploratory_sa_nsc_lifu_fgsea_curated_sets.csv (and sibling exploratory_sa_nsc_lifu_*)
+   Figure panels (PNG; manifest-driven; built by default at end of run_extended.py)
+     - Manifest: data/provenance/FIGURE_PANEL_MANIFEST.csv
+     - Builder: figures/build_sa_figure_bundle.py → outputs/figures/sa_bundle/*.png (runs at end of run_extended.py unless SKIP_SA_FIGURE_BUNDLE=1)
+     - Completeness checklist: outputs/SA_COMPLETENESS_CHECK.txt (also appended to EXTENDED_REPORT.txt)
+   Extended stack tables (Hallmark ORA/GSEA, Fisher, HypoMap, multi-library ORA, etc.)
+     - Listed in outputs/EXTENDED_REPORT.txt after each run (see also data/provenance/JOURNAL_TIER_COMPUTATIONAL_README.txt).
+
+7) PRIMARY VS EXPLORATORY (computational-only Science Advances spine)
+   - Treat cross-modal coupling + negative-control nulls as the leading integrative claim family in this repo.
+   - Two-cohort meta and HypoMap Fisher are supporting / sensitivity context unless a contrast-matched replication dataset is added.
+   - Manuscript-side gaps (figures, archiving, third cohort narrative): data/provenance/SCIENCE_ADVANCES_PENDING_CHECKLIST.txt

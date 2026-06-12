@@ -1,0 +1,9 @@
+PREREGISTRATION NOTE (public-data and exploratory arms)
+Last updated: 2026-05-14
+
+If outputs from this repository will support a registered report, preprint, or trial protocol:
+- Pre-specify primary MOESM endpoints and correction strategy before optional exploratory sweeps (padj thresholds, top-N DE lists, multi-library ORA breadth).
+- Log any post hoc change in thresholds in the publication supplement with date-stamped outputs (use tools/archive_outputs.ps1).
+- Public-data arms (GSE188646, HypoMap, GenAge) should list exact URLs and retrieval dates (see EXTERNAL_DATA_PROVENANCE_TABLE.csv).
+
+This file is guidance only — not a registry submission.

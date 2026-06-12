@@ -1,0 +1,27 @@
+# Generated outputs (reproduce via run_extended.py)
+outputs/
+
+# Large public reference downloads (see data/provenance/ and tools/download_*.py)
+data/GSE188646_hypo.integrated.final.20210719.RDS
+data/GSE188646_hypo.integrated.final.20210719.RDS.gz
+data/GSE188646_hypo.integrated.final.20210719.RDS.partial
+data/references/cellxgene_hypomap.h5ad
+data/references/cellxgene_hypomap.h5ad.partial
+data/references/bil_rstE3/
+data/references/geo/**/*.tar
+data/references/abc_atlas/metadata__MERFISH*.csv
+data/references/abc_atlas/metadata__MERFISH*
+data/references/hypomap_cellxgene_C185_named_mean_X_min200.csv
+
+# Python / IDE
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.egg-info/
+.env
+*.partial
+
+# OS
+.DS_Store
+Thumbs.db
