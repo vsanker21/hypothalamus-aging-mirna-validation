@@ -66,7 +66,7 @@ def build_reporting_summary(out_dir: Path) -> tuple[Path, Path]:
         "",
         "## Manual items before submission",
         "",
-        "- [ ] GitHub repository URL",
+        "- [ ] GitHub repository URL: https://github.com/vsanker21/hypothalamus-aging-mirna-validation (run tools/publish_to_github.ps1 after gh auth login)",
         "- [ ] Zenodo DOI",
         "- [ ] Author list, funding, competing interests",
         "",
