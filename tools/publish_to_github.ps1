@@ -17,8 +17,24 @@ Set-Location $Root
 if (-not (Test-Path $GitExe)) { throw "git not found at $GitExe" }
 if (-not (Test-Path $GhExe)) { throw "gh not found at $GhExe" }
 
-function Invoke-Git { & $GitExe @Args }
-function Invoke-Gh { & $GhExe @Args }
+function Invoke-Git {
+    & $GitExe @Args
+    if ($LASTEXITCODE -ne 0) { throw "git failed: $Args" }
+}
+
+function Invoke-Gh {
+    & $GhExe @Args
+    if ($LASTEXITCODE -ne 0) { throw "gh failed: $Args" }
+}
+
+function Test-GhRepo([string]$FullName) {
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = "SilentlyContinue"
+    & $GhExe repo view $FullName 2>$null | Out-Null
+    $ok = ($LASTEXITCODE -eq 0)
+    $ErrorActionPreference = $prev
+    return $ok
+}
 
 Write-Host "Checking GitHub CLI authentication..."
 & $GhExe auth status 2>&1 | Out-String | Write-Host
@@ -36,29 +52,34 @@ if (-not (Test-Path ".git")) {
 }
 
 Invoke-Git add -A
-$status = Invoke-Git status --porcelain
+$status = & $GitExe status --porcelain
 if ($status) {
-    Invoke-Git commit -m @"
+    $msg = @"
 Add hypothalamus aging miRNA integrative pipeline and V3 external validation.
 
 Includes Allen/Jin/MERFISH/RSTE3/ISH modules, reproducibility docs, and submission artifacts.
 Large reference files excluded per .gitignore; use download tools and Zenodo manifest.
 "@
+    Invoke-Git commit -m $msg
 } else {
     Write-Host "Nothing to commit."
 }
 
 $visibility = if ($Private) { "--private" } else { "--public" }
 $remote = "https://github.com/vsanker21/$RepoName.git"
+$fullName = "vsanker21/$RepoName"
 
-if (-not (Invoke-Gh repo view "vsanker21/$RepoName" 2>$null)) {
-    Write-Host "Creating GitHub repo vsanker21/$RepoName ..."
-    Invoke-Gh repo create $RepoName $visibility --source=. --remote=origin --description "Hypothalamic miRNA targetome x aging transcriptomics with V3 niche external validation"
+if (-not (Test-GhRepo $fullName)) {
+    Write-Host "Creating GitHub repo $fullName ..."
+    Invoke-Gh repo create $RepoName $visibility --source=. --remote=origin `
+        --description "Hypothalamic miRNA targetome x aging transcriptomics with V3 niche external validation"
 } else {
     Write-Host "Repo exists; ensuring remote origin..."
-    $hasOrigin = Invoke-Git remote 2>$null | Select-String -Pattern "^origin$"
-    if (-not $hasOrigin) {
+    $remotes = & $GitExe remote
+    if ($remotes -notcontains "origin") {
         Invoke-Git remote add origin $remote
+    } else {
+        Invoke-Git remote set-url origin $remote
     }
 }
 
