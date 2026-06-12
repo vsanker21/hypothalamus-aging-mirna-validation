@@ -71,8 +71,14 @@ $fullName = "vsanker21/$RepoName"
 
 if (-not (Test-GhRepo $fullName)) {
     Write-Host "Creating GitHub repo $fullName ..."
-    Invoke-Gh repo create $RepoName $visibility --source=. --remote=origin `
+    Invoke-Gh repo create $RepoName $visibility `
         --description "Hypothalamic miRNA targetome x aging transcriptomics with V3 niche external validation"
+    $remotes = & $GitExe remote
+    if ($remotes -notcontains "origin") {
+        Invoke-Git remote add origin $remote
+    } else {
+        Invoke-Git remote set-url origin $remote
+    }
 } else {
     Write-Host "Repo exists; ensuring remote origin..."
     $remotes = & $GitExe remote
