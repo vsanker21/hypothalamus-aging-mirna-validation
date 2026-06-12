@@ -1,6 +1,12 @@
 # Generated outputs (reproduce via run_extended.py)
 outputs/
 
+# Unrelated local / grant materials
+Critical Mass Ventures/
+
+# GEO soft caches (re-downloadable)
+data/geo_cache/
+
 # Large public reference downloads (see data/provenance/ and tools/download_*.py)
 data/GSE188646_hypo.integrated.final.20210719.RDS
 data/GSE188646_hypo.integrated.final.20210719.RDS.gz
